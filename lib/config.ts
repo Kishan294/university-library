@@ -14,5 +14,9 @@ export const config = {
       qstashUrl: process.env.QSTASH_URL!,
       qstashToken: process.env.QSTASH_TOKEN!,
     },
+    email: {
+      emailId: process.env.NODEMAILER_EMAIL!,
+      emailPassword: process.env.NODEMAILER_EMAIL_PASSWORD!,
+    },
   },
 };
