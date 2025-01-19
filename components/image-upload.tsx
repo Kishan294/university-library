@@ -2,13 +2,7 @@
 
 import { useToast } from "@/hooks/use-toast";
 import { config } from "@/lib/config";
-import {
-  IKImage,
-  IKVideo,
-  ImageKitProvider,
-  IKUpload,
-  ImageKitContext,
-} from "imagekitio-next";
+import { IKImage, IKUpload, ImageKitProvider } from "imagekitio-next";
 import {
   IKUploadResponse,
   UploadError,
@@ -22,7 +16,9 @@ const {
 
 const authenticator = async () => {
   try {
-    const response = await fetch(`${config.env.apiEndpoint}/api/auth/imagekit`);
+    const response = await fetch(
+      `${process.env.NODE_ENV === "development" ? config.env.apiEndpoint : config.env.prodApiEndpoint}/api/auth/imagekit`
+    );
     if (!response.ok) {
       const errorText = await response.text();
       throw new Error(
