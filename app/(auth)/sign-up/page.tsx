@@ -1,6 +1,7 @@
 "use client";
 
 import { AuthForm } from "@/components/auth-form";
+import { signUp } from "@/lib/actions/auth";
 import { signUpSchema } from "@/lib/validation";
 
 const SignUpPage = () => (
@@ -14,7 +15,7 @@ const SignUpPage = () => (
       university_id: 0,
       university_card: "",
     }}
-    onSubmit={() => {}}
+    onSubmit={signUp}
   />
 );
 export default SignUpPage;
