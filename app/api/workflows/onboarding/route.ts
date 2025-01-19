@@ -1,8 +1,10 @@
 import { db } from "@/database/drizzle";
 import { users } from "@/database/schema";
+import { emailBody } from "@/lib/email-body";
 import sendEmail from "@/lib/nodemailer";
 import { serve } from "@upstash/workflow/nextjs";
 import { eq } from "drizzle-orm";
+import handlebars from "handlebars";
 
 type UserState = "non-active" | "active";
 
@@ -18,11 +20,16 @@ const ONE_MONTH_IN_MS = 30 * ONE_DAY_IN_MS;
 export const { POST } = serve<InitialData>(async (context) => {
   const { email, fullname } = context.requestPayload;
 
+  const template = handlebars.compile(emailBody);
+  const replacements = { name: fullname };
+
+  const html = template(replacements);
+
   await context.run("new-signup", async () => {
     await sendEmail({
       to: email,
       subject: "Welcome to the platform",
-      html: `Welcome ${fullname}`,
+      html,
     });
   });
 
