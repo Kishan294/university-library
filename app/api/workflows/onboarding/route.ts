@@ -8,7 +8,7 @@ type UserState = "non-active" | "active";
 
 type InitialData = {
   email: string;
-  fullName: string;
+  fullname: string;
 };
 
 const ONE_DAY_IN_MS = 24 * 60 * 60 * 1000;
@@ -16,13 +16,13 @@ const THREE_DAY_IN_MS = 3 * ONE_DAY_IN_MS;
 const ONE_MONTH_IN_MS = 30 * ONE_DAY_IN_MS;
 
 export const { POST } = serve<InitialData>(async (context) => {
-  const { email, fullName } = context.requestPayload;
+  const { email, fullname } = context.requestPayload;
 
   await context.run("new-signup", async () => {
     await sendEmail({
       to: email,
       subject: "Welcome to the platform",
-      html: `Welcome ${fullName}`,
+      html: `Welcome ${fullname}`,
     });
   });
 
@@ -38,7 +38,7 @@ export const { POST } = serve<InitialData>(async (context) => {
         await sendEmail({
           to: email,
           subject: "Are you still there?",
-          html: `Hey, ${fullName}, we miss you`,
+          html: `Hey, ${fullname}, we miss you`,
         });
       });
     } else if (state === "active") {
@@ -46,7 +46,7 @@ export const { POST } = serve<InitialData>(async (context) => {
         await sendEmail({
           to: email,
           subject: "Welcome back",
-          html: `Welcome Back, ${fullName}`,
+          html: `Welcome Back, ${fullname}`,
         });
       });
     }
