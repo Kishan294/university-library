@@ -18,6 +18,20 @@ export const signInWithCredentails = async (
   const { email, password } = params;
   const ip = (await headers()).get("x-forwarded-for") || "127.0.0.1";
 
+  if (!email || !password) {
+    return { success: false, error: "Missing email or password" };
+  }
+
+  const existingUser = await db
+    .select()
+    .from(users)
+    .where(eq(users.email, email))
+    .limit(1);
+
+  if (existingUser.length === 0) {
+    return { success: false, error: "User not found" };
+  }
+
   const { success } = await ratelimit.limit(ip);
 
   if (!success) {
