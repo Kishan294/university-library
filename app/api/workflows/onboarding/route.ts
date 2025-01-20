@@ -21,7 +21,7 @@ export const { POST } = serve<InitialData>(async (context) => {
   const { email, fullname } = context.requestPayload;
 
   const template = handlebars.compile(emailBody);
-  const replacements = { name: fullname };
+  const replacements = { fullname: fullname };
 
   const html = template(replacements);
 
