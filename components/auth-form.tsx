@@ -27,6 +27,7 @@ import { FIELD_NAMES, FIELD_TYPES } from "@/constants";
 import { ImageUpload } from "./image-upload";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
+import { Loader } from "lucide-react";
 
 interface Props<T extends FieldValues> {
   type: "SIGN_IN" | "SIGN_UP";
@@ -49,6 +50,8 @@ export const AuthForm = <T extends FieldValues>({
     resolver: zodResolver(schema),
     defaultValues: defaultValues as DefaultValues<T>,
   });
+
+  const { isValid, isSubmitting } = form.formState;
 
   const handleSubmit: SubmitHandler<T> = async (data) => {
     const result = await onSubmit(data);
@@ -117,8 +120,12 @@ export const AuthForm = <T extends FieldValues>({
             />
           ))}
 
-          <Button className="form-btn" type="submit">
-            {isSignIn ? "Sign in" : "Sign up"}
+          <Button
+            disabled={!isValid || isSubmitting}
+            className="form-btn"
+            type="submit"
+          >
+            {isSignIn ? "Sign in" : "Sign up"} {isSubmitting && <Loader />}
           </Button>
         </form>
         <p className="text-center text-base font-medium">

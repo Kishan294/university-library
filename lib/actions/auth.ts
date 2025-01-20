@@ -77,6 +77,8 @@ export const signUp = async (
       password: hashedPassword,
     });
 
+    await signInWithCredentails({ email, password });
+
     await workflowClient.trigger({
       url: `${process.env.NODE_ENV === "development" ? config.env.apiEndpoint : config.env.prodApiEndpoint}/api/workflows/onboarding`,
       body: {
@@ -84,8 +86,6 @@ export const signUp = async (
         fullname,
       },
     });
-
-    await signInWithCredentails({ email, password });
 
     return { success: true };
   } catch (error) {
