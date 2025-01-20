@@ -18,5 +18,6 @@ export const config = {
       emailId: process.env.NODEMAILER_EMAIL!,
       emailPassword: process.env.NODEMAILER_EMAIL_PASSWORD!,
     },
+    secret: process.env.AUTH_SECRET!,
   },
 };

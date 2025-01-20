@@ -7,6 +7,7 @@ import {
   timestamp,
   uuid,
   varchar,
+  boolean,
 } from "drizzle-orm/pg-core";
 
 export const STATUS_ENUM = pgEnum("status", [
@@ -33,4 +34,5 @@ export const users = pgTable("users", {
   ceatedAt: timestamp("createdAt", {
     withTimezone: true,
   }).defaultNow(),
+  isEmailVerified: boolean("is_email_verified").default(false),
 });

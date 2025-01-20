@@ -1,7 +1,11 @@
 import { auth } from "@/auth";
+import { EmailVerificatonButton } from "@/components/email-verification-button";
 import { Header } from "@/components/header";
+import { Alert, AlertTitle } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
 import { db } from "@/database/drizzle";
 import { users } from "@/database/schema";
+import { sendVerificationEmail } from "@/lib/nodemailer";
 import { eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
 import { after } from "next/server";
@@ -11,6 +15,16 @@ const DashboardLayout = async ({ children }: { children: ReactNode }) => {
   const session = await auth();
 
   if (!session) redirect("/sign-in");
+
+  const user = await db
+    .select()
+    .from(users)
+    .where(eq(users.email, session?.user?.email!))
+    .limit(1);
+
+  if (user.length === 0) redirect("/sign-up");
+
+  // if (user[0]?.isEmailVerified === false) redirect("/verify-email");
 
   after(async () => {
     if (!session?.user?.id) return;
@@ -35,6 +49,14 @@ const DashboardLayout = async ({ children }: { children: ReactNode }) => {
     <main className="root-container">
       <div className="mx-auto max-w-7xl">
         <Header session={session} />
+        {!user[0]?.isEmailVerified && (
+          <Alert className="flex items-center justify-between bg-transparent border-primary">
+            <AlertTitle className="text-sm text-primary">
+              Email is not verified
+            </AlertTitle>
+            <EmailVerificatonButton email={user[0].email} />
+          </Alert>
+        )}
         <div className="mt-20 pb-20">{children}</div>
       </div>
     </main>

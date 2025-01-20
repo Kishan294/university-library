@@ -8,6 +8,13 @@
       "when": 1737200708422,
       "tag": "0000_aspiring_shocker",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1737387739181,
+      "tag": "0001_pale_dragon_man",
+      "breakpoints": true
     }
   ]
 }

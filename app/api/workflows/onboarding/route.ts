@@ -1,7 +1,8 @@
 import { db } from "@/database/drizzle";
 import { users } from "@/database/schema";
 import { emailBody } from "@/lib/email-body";
-import sendEmail from "@/lib/nodemailer";
+import sendUserEmail from "@/lib/nodemailer";
+
 import { serve } from "@upstash/workflow/nextjs";
 import { eq } from "drizzle-orm";
 import handlebars from "handlebars";
@@ -26,7 +27,7 @@ export const { POST } = serve<InitialData>(async (context) => {
   const html = template(replacements);
 
   await context.run("new-signup", async () => {
-    await sendEmail({
+    await sendUserEmail({
       to: email,
       subject: "Welcome to the platform",
       html,
@@ -42,7 +43,7 @@ export const { POST } = serve<InitialData>(async (context) => {
 
     if (state === "non-active") {
       await context.run("send-email-non-active", async () => {
-        await sendEmail({
+        await sendUserEmail({
           to: email,
           subject: "Are you still there?",
           html: `Hey, ${fullname}, we miss you`,
@@ -50,7 +51,7 @@ export const { POST } = serve<InitialData>(async (context) => {
       });
     } else if (state === "active") {
       await context.run("send-email-active", async () => {
-        await sendEmail({
+        await sendUserEmail({
           to: email,
           subject: "Welcome back",
           html: `Welcome Back, ${fullname}`,
